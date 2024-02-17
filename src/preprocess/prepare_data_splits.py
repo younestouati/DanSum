@@ -1,64 +1,37 @@
 """
 This script  prepares subsets and train-test-val splits of the cleaned data.
 """
-
+import argparse
 import pandas as pd
 from datasets import Dataset, concatenate_datasets, load_dataset
 
-seed = 22  # implement a seed to ensure replication
+def main(args):
+    # Load cleaned dataset from CSV
+    ds_clean = load_dataset("csv", data_files=args.input_path)
+    df_clean = pd.DataFrame(ds_clean["train"])
 
-ds_clean = load_dataset(
-    "csv",
-    data_files="/data-big-projects/danish-summarization-danewsroom/tok_ds_clean_.csv",
-)
-ds_clean = ds_clean["train"] 
-df_clean = pd.DataFrame(ds_clean) 
+    # Create a column that denotes whether both the article and the reference summary passed quality checks
+    df_clean["passed"] = (df_clean["passed_quality"] == True) & (df_clean["passed_quality_sum"] == True)
 
-# create a column that denotes whether both the article and the reference summary passed quality checks
-df_clean["passed"] = (df_clean["passed_quality"] == True) & (
-    df_clean["passed_quality_sum"] == True
-)
+    # Create train, val, and test splits
+    test_len = round(len(df_clean) * args.test_split)
+    val_len = round(len(df_clean) * args.test_split)
 
-# 89-10-10 split
-# subsetting abstractive samples
-df_abs = df_clean[df_clean["density_bin"] == "abstractive"]
-df_abs = df_abs.drop(columns="__index_level_0__")
-ds_abs = Dataset.from_pandas(df_abs)
+    train, test = df_clean.train_test_split(test_size=test_len, seed=args.seed).values()
+    train, val = train.train_test_split(test_size=val_len, seed=args.seed).values()
 
-df_mix = df_clean[df_clean["density_bin"] == "mixed"]
-df_mix = df_mix.drop(columns="__index_level_0__")
-ds_mix = Dataset.from_pandas(df_mix)
+    # Save train, val, and test datasets to CSV
+    train.to_csv(args.train_output_path, index=False)
+    val.to_csv(args.val_output_path, index=False)
+    test.to_csv(args.test_output_path, index=False)
 
-df_ext = df_clean[df_clean["density_bin"] == "extractive"]
-df_ext = df_ext.drop(columns="__index_level_0__")
-ds_ext = Dataset.from_pandas(df_ext)
-
-# 10% of abstractive dataset
-test_len = round(len(df_abs) / 10)  # test is 10%
-val_len = round(len(df_abs) / 10)
-
-# creating test and val splits
-abs_train, abs_test = ds_abs.train_test_split(
-    test_size=test_len, seed=seed
-).values()  # absolute size specified
-abs_train, abs_val = abs_train.train_test_split(test_size=val_len, seed=seed).values()
-
-mix_train, mix_test = ds_mix.train_test_split(test_size=test_len, seed=seed).values()
-
-ext_train, ext_test = ds_ext.train_test_split(test_size=test_len, seed=seed).values()
-
-train = concatenate_datasets([abs_train, mix_train])
-train = concatenate_datasets([train, ext_train])
-
-# %% save train test and val 
-train.to_csv("/data-big-projects/danish-summarization-danewsroom/train_all_.csv")
-abs_val.to_csv(
-    "/data-big-projects/danish-summarization-danewsroom/val_abstractive_.csv"
-)
-abs_test.to_csv(
-    "/data-big-projects/danish-summarization-danewsroom/test_abstractive_.csv"
-)
-mix_test.to_csv("/data-big-projects/danish-summarization-danewsroom/test_mixed_.csv")
-ext_test.to_csv(
-    "/data-big-projects/danish-summarization-danewsroom/test_extractive_.csv"
-)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Split and save a cleaned dataset.")
+    parser.add_argument("--input_path", type=str, required=True,default='tok_ds_clean_.csv' ,help="Path to the input CSV file.")
+    parser.add_argument("--train_output_path", type=str, required=True,default='train_all_.csv' ,help="Path to save the training CSV file.")
+    parser.add_argument("--val_output_path", type=str, required=True,default = 'val_abstractive_.csv' , help="Path to save the validation CSV file.")
+    parser.add_argument("--test_output_path", type=str,default = 'test_abstractive_.csv', required=True, help="Path to save the test CSV file.")
+    parser.add_argument("--test_split", type=float, default=0.1, help="Percentage of data to use for the test set.")
+    parser.add_argument("--seed", type=int, default=22, help="Seed for reproducibility.")
+    args = parser.parse_args()
+    main(args)
