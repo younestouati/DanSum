@@ -6,20 +6,20 @@ n_trials: 20
 n_jobs: 1
 
 project_name: "danewsroom"
-model_checkpoint: "/data-big-projects/danish-summarization-danewsroom/models/morning-snow-408/checkpoint-129080" # str: e.g. "google/mt5-base" or "google/mt5-large" or "google/mt5-xl" or "google/mt5-xxl"
-model_name: "mt5-large-abstractive" # str 
-device: "cuda" # str: "cuda" or "cpu"
+model_checkpoint: "google/mt5-base" # str: e.g. "google/mt5-base" or "google/mt5-large" or "google/mt5-xl" or "google/mt5-xxl"
+model_name: "mt5-base-abstractive" # str 
+device: "cpu" # str: "cuda" or "cpu"
 language: "da" # str: e.g. "da"
 wandb_mode: "run" # str: "run" or "dryrun"
 wandb_entity: "danish-summarisation" # str:
-cache_dir: "/data-big-projects/danish-summarization-danewsroom/cache_sarak" # str
+cache_dir: "./cache_sarak" # str
 redo_cache: False # bool: True or False. If True, will not use cached data
 training_data:
   text_column: "text" # str
   summary_column: "summary" # str
-  train_path: "/data-big-projects/danish-summarization-danewsroom/train_all_.csv" # str
-  val_path: "/data-big-projects/danish-summarization-danewsroom/val_abstractive_.csv" # str
-  test_path: "/data-big-projects/danish-summarization-danewsroom/test_abstractive_.csv" # str
+  train_path: "/content/DanSum/train_all_.csv" # str
+  val_path: "/content/DanSum/val_abstractive_.csv" # str
+  test_path: "/content/DanSum/test_abstractive_.csv" # str
   max_input_length: 1024 # int:  max text (article) max token length
   max_target_length: 128 # int: max reference summary max token length
   quality_filter: True # bool: True or False. If True, will use filtered dataset
@@ -62,7 +62,7 @@ training:
 hydra:
   sweeper:
     params:
-      model_checkpoint: choice("/data-big-projects/danish-summarization-danewsroom/models/crimson-plasma-287/checkpoint-129080", "/data-big-projects/danish-summarization-danewsroom/models/chocolate-haze-288/checkpoint-129080", "/data-big-projects/danish-summarization-danewsroom/models/earnest-shadow-289/checkpoint-129070")
+      model_checkpoint: choice("google/mt5-base")
       training.learning_rate: interval(5e-5, 5e-4) # (5e-6, 5e-4)
       model.dropout_rate: interval(0.0, 0.1) # (0.0, 0.3)
       training.lr_scheduler_type: choice("constant", "linear", "cosine", "polynomial") 
@@ -70,6 +70,6 @@ hydra:
       model.no_repeat_ngram_size: int(interval(3, 5)) # (2, 5)
       model.length_penalty: int(interval(4, 7)) # (4, 10)
       training.max_grad_norm: int(interval(1, 10))
-      training_data.quality_filter: choice(True, False)
-      training_data.summary_type: choice(["abstractive"], ["abstractive", "mixed"], ["abstractive", "mixed", "extractive"])
+      training_data.quality_filter: choice(True)
+      training_data.summary_type: choice(["abstractive"])
 

@@ -46,6 +46,7 @@ from utils import flatten_nested_config
 
 def preprocess_function(examples, tokenizer, cfg):
     cfg = cfg.training_data
+    print(examples.keys())
     inputs = [doc for doc in examples["text"]]
 
     # tokenize the input + truncate to max input length
@@ -191,10 +192,10 @@ def main(cfg: DictConfig) -> None:
     # Setup
     # Setting up wandb
     run = wandb.init(
-        project=cfg.project_name,
+        project='danewsroom',
         config=flatten_nested_config(cfg),
-        mode=cfg.wandb_mode,
-        entity=cfg.wandb_entity,
+        #mode=cfg.wandb_mode,
+        #entity=cfg.wandb_entity,
     )
 
     setup_nltk()
