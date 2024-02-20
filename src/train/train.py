@@ -46,7 +46,6 @@ from utils import flatten_nested_config
 
 def preprocess_function(examples, tokenizer, cfg):
     cfg = cfg.training_data
-    print(examples.keys())
     inputs = [doc for doc in examples["text"]]
 
     # tokenize the input + truncate to max input length
@@ -231,15 +230,15 @@ def main(cfg: DictConfig) -> None:
         tokenized_datasets = tokenized_datasets.filter(lambda x: x["passed"] is True)
     summary_types = cfg.training_data.summary_type  # a list
 
-    if "mixed" not in summary_types:
-        tokenized_datasets["train"] = tokenized_datasets["train"].filter(
-            lambda x: x["density_bin"] != "mixed"
-        )
+    # if "mixed" not in summary_types:
+    #     tokenized_datasets["train"] = tokenized_datasets["train"].filter(
+    #         lambda x: x["density_bin"] != "mixed"
+    #     )
 
-    if "extractive" not in summary_types:
-        tokenized_datasets["train"] = tokenized_datasets["train"].filter(
-            lambda x: x["density_bin"] != "extractive"
-        )
+    # if "extractive" not in summary_types:
+    #     tokenized_datasets["train"] = tokenized_datasets["train"].filter(
+    #         lambda x: x["density_bin"] != "extractive"
+    #     )
 
     # Fine-tuning
     # load the pretrained mT5 model from the Huggingface hub
