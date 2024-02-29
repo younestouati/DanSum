@@ -8,9 +8,9 @@ from datasets import Dataset, concatenate_datasets, load_dataset
 
 def main(args):
     # Load cleaned dataset from CSV
-    ds_clean = load_dataset("csv", data_files=args.input_path)
-    ds_clean = Dataset.from_dict(ds_clean)
-    df_clean = pd.DataFrame(ds_clean["train"])
+    df_clean = pd.read_csv(args.input_path)
+    # ds_clean = Dataset.from_dict(ds_clean)
+    # df_clean = pd.DataFrame(ds_clean["train"])
   
     # Create a column that denotes whether both the article and the reference summary passed quality checks
     df_clean["passed"] = (df_clean["passed_quality"] == True) & (df_clean["passed_quality_sum"] == True)

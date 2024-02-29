@@ -17,9 +17,9 @@ redo_cache: False # bool: True or False. If True, will not use cached data
 training_data:
   text_column: "text" # str
   summary_column: "summary" # str
-  train_path: "/content/DanSum/train_all_.csv" # str
-  val_path: "/content/DanSum/val_abstractive_.csv" # str
-  test_path: "/content/DanSum/test_abstractive_.csv" # str
+  train_path: "/content/data/train_all_.csv" # str
+  val_path: "/content/data/val_abstractive_.csv" # str
+  test_path: "/content/data/test_abstractive_.csv" # str
   max_input_length: 1024 # int:  max text (article) max token length
   max_target_length: 128 # int: max reference summary max token length
   quality_filter: True # bool: True or False. If True, will use filtered dataset
@@ -35,7 +35,7 @@ model:
   early_stopping: False # bool: early stopping
   dropout_rate: 0.1 # float: dropout
 training:
-  output_dir: "/data-big-projects/danish-summarization-danewsroom/models/" # str: output directory
+  output_dir: "/content/models" # str: output directory
   overwrite_output_dir: True # bool: overwrite output directory
   evaluation_strategy: "epoch" # str: "steps" or "epoch"
   save_strategy: "epoch" # str: "steps" or "epoch"
