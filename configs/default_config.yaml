@@ -17,9 +17,9 @@ redo_cache: False # bool: True or False. If True, will not use cached data
 training_data:
   text_column: "text" # str
   summary_column: "summary" # str
-  train_path: "/content/data/train_all_.csv" # str
-  val_path: "/content/data/val_abstractive_.csv" # str
-  test_path: "/content/data/test_abstractive_.csv" # str
+  train_path: "/content/drive/MyDrive/models/danish/data/train_all_.csv" # str
+  val_path: "/content/drive/MyDrive/models/danish/data/val_abstractive_.csv" # str
+  test_path: "/content/drive/MyDrive/models/danish/data/test_abstractive_.csv" # str
   max_input_length: 1024 # int:  max text (article) max token length
   max_target_length: 128 # int: max reference summary max token length
   quality_filter: True # bool: True or False. If True, will use filtered dataset
@@ -50,7 +50,7 @@ training:
   save_total_limit: 100 # int: number of checkpoints to save
   num_train_epochs: 10 # int: number of epochs
   predict_with_generate: True # bool: predict with generate
-  fp16: True # bool: use fp16
+  fp16: False # bool: use fp16
   load_best_model_at_end: True # bool: load best model at end
   metric_for_best_model: "loss" # str: metric for best model
   pad_to_multiple_of: 8 # int: pad to multiple of
