@@ -34,7 +34,7 @@ model:
   length_penalty: 5.0 # float: length penalty
   early_stopping: False # bool: early stopping
   dropout_rate: 0.1 # float: dropout
-  quantiz: False #wether to have a quantized training or not
+  quantiz: True #wether to have a quantized training or not
 training:
   output_dir: "/content/models" # str: output directory
   overwrite_output_dir: True # bool: overwrite output directory
