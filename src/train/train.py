@@ -24,7 +24,7 @@ import os
 import ssl
 import time
 from functools import partial
-
+from peft import LoraConfig, get_peft_model, prepare_model_for_int8_training, TaskType
 import datasets
 import hydra
 import nltk
@@ -242,16 +242,47 @@ def main(cfg: DictConfig) -> None:
 
     # Fine-tuning
     # load the pretrained mT5 model from the Huggingface hub
-    model = AutoModelForSeq2SeqLM.from_pretrained(
-        cfg.model_checkpoint,
-        min_length=cfg.model.min_length,
-        max_length=cfg.model.max_length,
-        num_beams=cfg.model.num_beams,
-        no_repeat_ngram_size=cfg.model.no_repeat_ngram_size,
-        length_penalty=cfg.model.length_penalty,
-        early_stopping=cfg.model.early_stopping,
-        dropout_rate=cfg.model.dropout_rate,
-    )
+
+    if cfg.model.quantiz:
+
+        model = AutoModelForSeq2SeqLM.from_pretrained(
+            cfg.model_checkpoint,
+            min_length=cfg.model.min_length,
+            max_length=cfg.model.max_length,
+            num_beams=cfg.model.num_beams,
+            no_repeat_ngram_size=cfg.model.no_repeat_ngram_size,
+            length_penalty=cfg.model.length_penalty,
+            early_stopping=cfg.model.early_stopping,
+            dropout_rate=cfg.model.dropout_rate,
+            load_in_8bit=True,
+        )
+        # Define LoRA Config 
+        lora_config = LoraConfig(
+        r=16, 
+        lora_alpha=32,
+        target_modules=["q", "v"],
+        lora_dropout=0.05,
+        bias="none",
+        task_type=TaskType.SEQ_2_SEQ_LM
+        )
+        # prepare int-8 model for training
+        model = prepare_model_for_int8_training(model)
+
+        # add LoRA adaptor
+        model = get_peft_model(model, lora_config)
+        
+
+    else:
+        model = AutoModelForSeq2SeqLM.from_pretrained(
+            cfg.model_checkpoint,
+            min_length=cfg.model.min_length,
+            max_length=cfg.model.max_length,
+            num_beams=cfg.model.num_beams,
+            no_repeat_ngram_size=cfg.model.no_repeat_ngram_size,
+            length_penalty=cfg.model.length_penalty,
+            early_stopping=cfg.model.early_stopping,
+            dropout_rate=cfg.model.dropout_rate,
+        )
 
     # specify training arguments
     args = Seq2SeqTrainingArguments(
