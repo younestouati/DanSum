@@ -1,58 +1,37 @@
-<div id="top"></div>
-<div align="center">
-    <img src="data/logo_DanSumT5.png" alt="Logo" width="70" height="70">
-<h2 align="center">DanSumT5: Automatic Abstractive Summarisation in Danish</h3>
+## Installations 
 
-  <em><a href="https://github.com/sarakolding"><strong>Sara Kolding</strong></a>, <a href="https://github.com/katrinenymann"><strong>Katrine Nymann</strong></a>, <a href="https://github.com/idabh"><strong>Ida Bang Hansen</strong></a>, <a href="https://github.com/KennethEnevoldsen"><strong>Kenneth C. Enevoldsen</strong></a> & <a href="https://github.com/rdkm89"><strong>Ross Deans Kristensen-McLachlan</strong></a></em>
-  <br />
-    <a href="https://huggingface.co/Danish-summarisation"><strong>Access our models through huggingface</strong></a>
-    <br />
-  </p>
-</div>
+The Notebook contains the packages need for running the project on colab.
 
-## About The Project
+## Data
 
-This repository contains the code for developing an automatic abstractive summarisation tool in Danish.
+The notebook contains downloading the data into colab.
 
-The model can be used for summarisation of individual news articles through the [huggingface API](https://huggingface.co/Danish-summarisation/DanSum-mT5-large).
+### Processing the data
 
-### Abstract
-Automatic abstractive text summarization
-is a challenging task in the field of natural language processing. This paper
-presents a model for domain-specific summarization for Danish news articles, DanSumT5; an mT5 model fine-tuned on a
-cleaned subset of the DaNewsroom dataset
-consisting of abstractive summary-article
-pairs. The resulting state-of-the-art model
-is evaluated both quantitatively and qualitatively, using ROUGE and BERTScore
-metrics and human rankings of the summaries. We find that although model refinements increase quantitative and qualitative performance, the model is still prone
-to factual errors. We discuss the limitations of current evaluation methods for automatic abstractive summarization and underline the need for improved metrics and
-transparency within the field. We suggest that future work should employ methods for detecting and reducing errors in
-model output and methods for referenceless evaluation of summaries. <br>
-<br>
-***Key words:** automatic summarisation, transformers, Danish, natural language processing*
+The data should be processed using two scripts `clean_data.py` and `prepare_data_splits.py`
 
-### Model performance
-The models were fine-tuned using <a href="https://wandb.ai/danish-summarisation/danewsroom/reports/Danish-Summarisation-hyperparameter-search--VmlldzoyNjk4MTMw?accessToken=cu0krm4f24m7qh3j2ilxhrac9f8zika9kerh3q3gzty51xy40a44vjyteffj9sc0">hyperparameter search</a>. These are the quantitative results of our model-generated summaries:
+#### example for using with the arguments:
 
-| Model |  ROUGE-1 | ROUGE-2 | ROUGE-L | BERTScore |
-| ------------- | ------------- | ------------- | ------------- | ------------- |
-| <a href="https://huggingface.co/Danish-summarisation/DanSum-mT5-small"> **DanSum-mT5-small** </a> | 21.42 [21.26, 21.55]  |  6.21 [6.11, 6.30]  |  16.10 [15.98, 16.22]  | 88.28 [88.26, 88.31] |
-| <a href="https://huggingface.co/Danish-summarisation/DanSum-mT5-base"> **DanSum-mT5-base** | 23.21 [23.06, 23.36]  | 7.12 [7.00, 7.22]  | 17.64 [17.50, 17.79]  |  88.77 [88.74, 88.80] |
-| <a href="https://huggingface.co/Danish-summarisation/DanSum-mT5-large"> **DanSum-mT5-large** | 23.76 [23.60, 23.91]  |  7.46 [7.35, 7.59]  | 18.25 [18.12, 18.39]  |  88.97 [88.95, 89.00] |
+```python clean_data.py --dataset_path /content/unbait-dataset-full.json --output_path /content/data/tok_ds_clean_.csv```
 
-To get a better understanding of the model's performance, we also had two of the authors to blindly (without knowledge of which model generated which summary) rank the model-generated summaries for 100 articles.
+and 
 
-### Get started
-* The DaNewsroom data set can be accessed upon request (https://github.com/danielvarab/da-newsroom)
-* Clone the repo
-   ```sh
-   git clone https://github.com/Danish-summarisation/DanSum
-   ```
-* Install required modules
-  ```sh
-  pip install -r requirements.txt
-  ```
+```python prepare_data_splits.py --input_path /content/data/tok_ds_clean_.csv --train_output_path /content/data/train_all_.csv --val_output_path /content/data/val_abstractive_.csv --test_output_path /content/data/test_abstractive_.csv```
 
-             
-## Acknowledgments
-*  DAT5 icon created with [OpenAI's DALL-E 2](https://openai.com/dall-e-2/)
+once you do this process you can save the data and use it directly in the training scripts.
+
+## Training 
+
+training should be done using `train.py` the script argument are in config file
+
+the most important arguments are: 
+
+- model_checkpoint: "google/mt5-small" # str: e.g. "google/mt5-base" or "google/mt5-large" or "google/mt5-xl" or "google/mt5-xxl"
+- train_path: "/content/drive/MyDrive/models/danish/data/train_all_.csv" # str
+- val_path: "/content/drive/MyDrive/models/danish/data/val_abstractive_.csv" # str
+- test_path: "/content/drive/MyDrive/models/danish/data/test_abstractive_.csv" # str
+- quantiz: False #wether to have a quantized training or not
+
+
+
+

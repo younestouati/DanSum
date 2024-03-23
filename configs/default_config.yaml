@@ -6,7 +6,7 @@ n_trials: 20
 n_jobs: 1
 
 project_name: "danewsroom"
-model_checkpoint: "google/mt5-base" # str: e.g. "google/mt5-base" or "google/mt5-large" or "google/mt5-xl" or "google/mt5-xxl"
+model_checkpoint: "google/mt5-small" # str: e.g. "google/mt5-base" or "google/mt5-large" or "google/mt5-xl" or "google/mt5-xxl"
 model_name: "mt5-base-abstractive" # str 
 device: "cuda" # str: "cuda" or "cpu"
 language: "da" # str: e.g. "da"
@@ -34,7 +34,7 @@ model:
   length_penalty: 5.0 # float: length penalty
   early_stopping: False # bool: early stopping
   dropout_rate: 0.1 # float: dropout
-  quantiz: False
+  quantiz: False #wether to have a quantized training or not
 training:
   output_dir: "/content/models" # str: output directory
   overwrite_output_dir: True # bool: overwrite output directory
