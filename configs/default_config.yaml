@@ -36,7 +36,7 @@ model:
   dropout_rate: 0.1 # float: dropout
   quantiz: True #wether to have a quantized training or not
 training:
-  output_dir: "/content/models" # str: output directory
+  output_dir: "/content/drive/MyDrive/models/danish" # str: output directory
   overwrite_output_dir: True # bool: overwrite output directory
   evaluation_strategy: "epoch" # str: "steps" or "epoch"
   save_strategy: "epoch" # str: "steps" or "epoch"
