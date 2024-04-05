@@ -286,7 +286,7 @@ def main(cfg: DictConfig) -> None:
 
     # specify training arguments
     args = Seq2SeqTrainingArguments(
-        output_dir=cfg.training.output_dir + run.name,
+        output_dir=cfg.training.output_dir + "/" + run.name,
         evaluation_strategy=cfg.training.evaluation_strategy,
         save_strategy=cfg.training.save_strategy,
         learning_rate=cfg.training.learning_rate,
@@ -328,6 +328,9 @@ def main(cfg: DictConfig) -> None:
 
     # train the model!
     trainer.train()
+
+    model.save_pretrained('./my_finetuned_model')
+    tokenizer.save_pretrained('./my_finetuned_model')
 
     end = time.time()
     print("TIME SPENT:")
