@@ -329,8 +329,8 @@ def main(cfg: DictConfig) -> None:
     # train the model!
     trainer.train()
 
-    model.save_pretrained('./my_finetuned_model')
-    tokenizer.save_pretrained('./my_finetuned_model')
+    model.save_pretrained('/content/drive/MyDrive/models/danish/final')
+    tokenizer.save_pretrained('/content/drive/MyDrive/models/danish/final')
 
     end = time.time()
     print("TIME SPENT:")
