@@ -408,49 +408,44 @@ class QualityFilter:
     def filter_corpus(
         self, texts: Iterable[str], as_tuples: bool = False, **kwargs
     ) -> Union[Iterable[str], Iterable[Tuple[str, Union[Any, None]]]]:
-        """Applies quality filter.
+        """Applies quality filter with verbose output.
 
         Args:
-            texts (iter of str):
-                An iterable of strings of the text you wish to filter.
-            as_tuples (bool, optional):
-                If True doc is expected to be a tuple of size two with the first
-                element being the text. The output of this function will then also be a
-                generator of tuples filtered based on the text. Defaults to False.
+            texts (iter of str): An iterable of strings of the text you wish to filter.
+            as_tuples (bool, optional): If True, doc is expected to be a tuple with the first element being the text.
 
         Yields:
-            str or pair:
-                Either texts or tuples depending on the as_tuples argument.
+            str or pair: Either texts or tuples depending on the as_tuples argument.
         """
         texts = iter(texts)
         docs = self.nlp.pipe(texts, as_tuples=as_tuples, **kwargs)
+        doc_count = 0
+        filtered_count = 0
 
-        while docs:
+        while True:
             try:
                 doc = next(docs)
 
-                # Split tuple into doc and context
                 if as_tuples:
                     doc, context = doc
 
                 is_filtered = self.is_filtered(doc)
-
-                # Don't yield texts which did not pass the filter
-                if is_filtered is not None:
+                if is_filtered:
+                    filtered_count += 1
                     continue
 
-                # Yield doc along with context
                 if as_tuples:
                     yield doc, context
                 else:
                     yield doc
+                doc_count += 1
 
-            # Max length exceeded
-            except ValueError:
-                self.filtered["max_chr_length"] += 1
-                docs = self.nlp.pipe(texts)
             except StopIteration:
+                print(f"Filtering complete. Total documents processed: {doc_count}, filtered: {filtered_count}")
                 break
+            except ValueError:
+                print("Error processing document: Maximum character length exceeded.")
+                docs = self.nlp.pipe(texts, as_tuples=as_tuples, **kwargs)
 
     def __call__(
         self, *args, **kwargs
@@ -483,7 +478,7 @@ class QualityFilter:
         """
         for filter, filter_fn in self.filters.items():
             if not filter_fn(doc):
-                # log filtered documents
+                print(f"Document filtered by {filter_name}")
                 self.filtered[filter] += 1
                 return filter
 
@@ -621,7 +616,11 @@ class QualityFilter:
         Returns:
             bool: A boolean indicator of whether the text passed the filter.
         """
-        return doc_length[0] <= doc._.n_words <= doc_length[1]
+        word_count = doc._.n_words
+        if not (doc_length[0] <= word_count <= doc_length[1]):
+            print(f"Filtering out due to word count: {word_count} not within {doc_length}")
+            return False
+        return True
 
     @staticmethod
     def mean_word_length(doc: Doc, mean_word_length: Tuple[int, int]) -> bool:
