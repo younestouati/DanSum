@@ -422,7 +422,7 @@ class QualityFilter:
         doc_count = 0
         filtered_count = 0
 
-        while True:
+        while docs:
             try:
                 doc = next(docs)
 
@@ -430,7 +430,7 @@ class QualityFilter:
                     doc, context = doc
 
                 is_filtered = self.is_filtered(doc)
-                if is_filtered:
+                if is_filtered is not None:
                     filtered_count += 1
                     continue
 
