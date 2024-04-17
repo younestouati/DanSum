@@ -422,7 +422,7 @@ class QualityFilter:
         doc_count = 0
         filtered_count = 0
 
-        while docs:
+        while True:
             try:
                 doc = next(docs)
 
