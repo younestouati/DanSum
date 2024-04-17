@@ -479,8 +479,8 @@ class QualityFilter:
         for filter_name, filter_fn in self.filters.items():
             if not filter_fn(doc):
                 print(f"Document filtered by {filter_name}")
-                self.filtered[filter] += 1
-                return filter
+                self.filtered[filter_name] += 1
+                return filter_name
         return None
 
     def describe_filter(self, texts: Iterable[tuple], **kwargs) -> Iterable[str]:
