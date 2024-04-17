@@ -481,6 +481,7 @@ class QualityFilter:
                 print(f"Document filtered by {filter_name}")
                 self.filtered[filter] += 1
                 return filter
+        return None
 
     def describe_filter(self, texts: Iterable[tuple], **kwargs) -> Iterable[str]:
         """
