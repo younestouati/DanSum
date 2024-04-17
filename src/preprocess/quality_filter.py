@@ -476,7 +476,7 @@ class QualityFilter:
                 The name of the filter which filtered out the document or None if the
                 document wasn't filtered.
         """
-        for filter, filter_fn in self.filters.items():
+        for filter_name, filter_fn in self.filters.items():
             if not filter_fn(doc):
                 print(f"Document filtered by {filter_name}")
                 self.filtered[filter] += 1
