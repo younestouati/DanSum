@@ -421,6 +421,8 @@ class QualityFilter:
         docs = self.nlp.pipe(texts, as_tuples=as_tuples, **kwargs)
         doc_count = 0
         filtered_count = 0
+        print("Will start filtering!")
+
 
         while True:
             try:
