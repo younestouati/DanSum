@@ -433,6 +433,7 @@ class QualityFilter:
 
                 is_filtered = self.is_filtered(doc)
                 if is_filtered is not None:
+                    print("This was filtered: ", doc)
                     filtered_count += 1
                     continue
 
