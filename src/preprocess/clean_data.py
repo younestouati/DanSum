@@ -34,8 +34,10 @@ def main(args):
     ds_train = ds_train.rename_column("text_fix", "text")
 
     # Tokenize and preprocess
+    print("Starting preprocessing")
     tok_dd = ds_train.map(preprocess_function, batched=True)
     tok_ds = tok_dd
+    print("Done preprocessing")
 
     # Add features to ds with the tokenized lengths
     tok_text_len = [len(text) for text in tok_dd["input_ids"]] 
@@ -104,6 +106,7 @@ def main(args):
         ignore_filters=filter_to_ignore,
     )
 
+    print("Applying quality filters")
     texts = tok_ds_clean["text"]
     summaries = tok_ds_clean["summary"]
     filtered = qf.describe_filter(texts)
@@ -114,6 +117,7 @@ def main(args):
     filter_sum = [None] * len(texts)
 
     for n, i in enumerate(texts):
+        print("Looping i:", i)
         result = next(filtered)
         result_sum = next(filtered_sum)
         if result == "passed filters":
@@ -139,6 +143,7 @@ def main(args):
     tok_ds_clean.to_csv(args.output_path, index=False)
 
 if __name__ == "__main__":
+    print("Starting cleaning process")
     parser = argparse.ArgumentParser(description="Clean and filter a JSON dataset.")
     parser.add_argument("--dataset_path", type=str, required=True, help="Path to the input JSON dataset.")
     parser.add_argument("--output_path", type=str, required=True, help="Path to save the cleaned CSV file.")
