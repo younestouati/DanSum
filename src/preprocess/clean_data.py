@@ -117,7 +117,7 @@ def main(args):
     filter_sum = [None] * len(texts)
 
     for n, i in enumerate(texts):
-        print("Looping i:", i)
+        print("Looping n:", n)
         result = next(filtered)
         result_sum = next(filtered_sum)
         if result == "passed filters":
