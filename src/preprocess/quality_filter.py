@@ -433,7 +433,6 @@ class QualityFilter:
 
                 is_filtered = self.is_filtered(doc)
                 if is_filtered is not None:
-                    print("This was filtered: ", doc)
                     filtered_count += 1
                     continue
 
@@ -482,6 +481,7 @@ class QualityFilter:
         for filter_name, filter_fn in self.filters.items():
             if not filter_fn(doc):
                 print(f"Updated message. Document filtered by {filter_name}")
+                print("This was filtered: ", doc)
                 self.filtered[filter_name] += 1
                 return filter_name
         return None
