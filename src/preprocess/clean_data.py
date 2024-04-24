@@ -116,8 +116,10 @@ def main(args):
     passed_quality_sum = [None] * len(texts)
     filter_sum = [None] * len(texts)
 
+    # counter = 0
     for n, i in enumerate(texts):
-        print("Looping n:", n)
+        # print("Looping:", counter)
+        counter += 1;
         result = next(filtered)
         result_sum = next(filtered_sum)
         if result == "passed filters":
