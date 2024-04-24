@@ -119,7 +119,7 @@ def main(args):
     # counter = 0
     for n, i in enumerate(texts):
         # print("Looping:", counter)
-        counter += 1;
+        # counter += 1;
         result = next(filtered)
         result_sum = next(filtered_sum)
         if result == "passed filters":
