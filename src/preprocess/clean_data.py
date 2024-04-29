@@ -29,7 +29,7 @@ def main(args):
     t_texts = [fix_text(i) for i in ds_train["article"]]
     ds_train = ds_train.add_column("summary_fix", t_sums)
     ds_train = ds_train.add_column("text_fix", t_texts)
-    ds_train = ds_train.remove_columns(["aiGeneratedHeadline", "article"])
+    ds_train = ds_train.remove_columns(["aiGeneratedHeadline", "article", "originalHeadline", "scraped", "scrapeFailed", "aiHeadlineGenerated", "aiHeadlineGenerationFailed"])
     ds_train = ds_train.rename_column("summary_fix", "summary")
     ds_train = ds_train.rename_column("text_fix", "text")
 
