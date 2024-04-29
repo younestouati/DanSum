@@ -29,7 +29,7 @@ def main(args):
     t_texts = [fix_text(i) for i in ds_train["article"]]
     ds_train = ds_train.add_column("summary_fix", t_sums)
     ds_train = ds_train.add_column("text_fix", t_texts)
-    ds_train = ds_train.remove_columns(["aiGeneratedHeadline", "article", "originalHeadline", "scraped", "scrapeFailed", "aiHeadlineGenerated", "aiHeadlineGenerationFailed"])
+    ds_train = ds_train.remove_columns(["aiGeneratedHeadline", "article", "originalHeadline", "scraped", "scrapeFailed", "aiHeadlineGenerated", "aiHeadlineGenerationFailed", "href", ])
     ds_train = ds_train.rename_column("summary_fix", "summary")
     ds_train = ds_train.rename_column("text_fix", "text")
 
@@ -139,7 +139,7 @@ def main(args):
     tok_ds_clean = tok_ds_clean.add_column("passed_quality", passed_quality)
     tok_ds_clean = tok_ds_clean.add_column("filter", filter)
     tok_ds_clean = tok_ds_clean.add_column("passed_quality_sum", passed_quality_sum)
-    tok_ds_clean = tok_ds_clean.add_column("filter_sum", filter_sum)
+    # tok_ds_clean = tok_ds_clean.add_column("filter_sum", filter_sum)
 
     # Save cleaned data to CSV
     tok_ds_clean.to_csv(args.output_path, index=False)
