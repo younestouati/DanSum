@@ -20,7 +20,7 @@ def preprocess_function(examples):
     return model_inputs
 
 def main(args):
-    # Load JSON data
+        # Load JSON data
     ds = load_dataset("json", data_files={"train": args.dataset_path})
     ds_train = ds["train"]
 
@@ -29,7 +29,15 @@ def main(args):
     t_texts = [fix_text(i) for i in ds_train["article"]]
     ds_train = ds_train.add_column("summary_fix", t_sums)
     ds_train = ds_train.add_column("text_fix", t_texts)
-    ds_train = ds_train.remove_columns(["aiGeneratedHeadline", "article", "originalHeadline", "scraped", "scrapeFailed", "aiHeadlineGenerated", "aiHeadlineGenerationFailed", "href", ])
+
+    # Columns to potentially remove if they exist
+    cols_to_remove = ["aiGeneratedHeadline", "article", "originalHeadline", "scraped", "scrapeFailed", "aiHeadlineGenerated", "aiHeadlineGenerationFailed", "href"]
+    existing_cols_to_remove = [col for col in cols_to_remove if col in ds_train.column_names]
+
+    # Remove the specified columns if they exist
+    if existing_cols_to_remove:
+        ds_train = ds_train.remove_columns(existing_cols_to_remove)
+
     ds_train = ds_train.rename_column("summary_fix", "summary")
     ds_train = ds_train.rename_column("text_fix", "text")
 
