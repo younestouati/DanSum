@@ -227,7 +227,7 @@ def main(cfg: DictConfig) -> None:
     )
 
     if cfg.training_data.quality_filter:
-        tokenized_datasets = tokenized_datasets.filter(lambda x: x["passed"] is True)
+        tokenized_datasets = tokenized_datasets.filter(lambda x: x["passed_quality"] is True and x["passed_quality_sum"] is True)
     summary_types = cfg.training_data.summary_type  # a list
 
     # if "mixed" not in summary_types:
