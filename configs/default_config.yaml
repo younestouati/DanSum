@@ -17,8 +17,8 @@ redo_cache: False # bool: True or False. If True, will not use cached data
 training_data:
   text_column: "text" # str
   summary_column: "summary" # str
-  train_path: "/content/drive/MyDrive/unbait/training-data/csv/merged/sample/split/train-set.csv" # str
-  val_path: "/content/drive/MyDrive/unbait/training-data/csv/merged/sample/split/validation-set.csv" # str
+  train_path: "/content/drive/MyDrive/unbait/training-data/csv/merged/full/split/train-set.csv" # str
+  val_path: "/content/drive/MyDrive/unbait/training-data/csv/merged/full/split/validation-set.csv" # str
   test_path: "/content/drive/MyDrive/models/danish/data/test_abstractive_.csv" # str
   max_input_length: 1024 # int:  max text (article) max token length
   max_target_length: 128 # int: max reference summary max token length
