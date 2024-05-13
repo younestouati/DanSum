@@ -42,8 +42,8 @@ training:
   save_strategy: "epoch" # str: "steps" or "epoch"
   learning_rate: 0.0003 # float: learning rate
   lr_scheduler_type: "polynomial" # str: "linear" or "cosine" or "cosine_with_restarts" or "polynomial" or "constant" or "constant_with_warmup"
-  per_device_train_batch_size: 4 # int: batch size
-  per_device_eval_batch_size: 4 # int: batch size
+  per_device_train_batch_size: 2 # int: batch size
+  per_device_eval_batch_size: 2 # int: batch size
   logging_steps: 50 # int: log every x steps
   save_steps: 10000 # int: save every x steps
   eval_steps: 10000 # int: evaluate every x steps
@@ -51,13 +51,13 @@ training:
   save_total_limit: 100 # int: number of checkpoints to save
   num_train_epochs: 3 # int: number of epochs
   predict_with_generate: True # bool: predict with generate
-  fp16: True # bool: use fp16
+  fp16: False # bool: use fp16
   load_best_model_at_end: True # bool: load best model at end
   metric_for_best_model: "loss" # str: metric for best model
   pad_to_multiple_of: 8 # int: pad to multiple of
   max_grad_norm: 5 # float
   include_inputs_for_metrics: True
-  gradient_accumulation_steps: 1
+  gradient_accumulation_steps: 4
   #max_steps: 10
   
 hydra:
