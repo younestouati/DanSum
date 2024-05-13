@@ -51,7 +51,7 @@ training:
   save_total_limit: 100 # int: number of checkpoints to save
   num_train_epochs: 3 # int: number of epochs
   predict_with_generate: True # bool: predict with generate
-  fp16: False # bool: use fp16
+  fp16: True # bool: use fp16
   load_best_model_at_end: True # bool: load best model at end
   metric_for_best_model: "loss" # str: metric for best model
   pad_to_multiple_of: 8 # int: pad to multiple of
