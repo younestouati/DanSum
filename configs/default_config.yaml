@@ -38,17 +38,17 @@ model:
 training:
   output_dir: "/content/drive/MyDrive/unbait/output-models" # str: output directory
   overwrite_output_dir: True # bool: overwrite output directory
-  evaluation_strategy: "epoch" # str: "steps" or "epoch"
-  save_strategy: "epoch" # str: "steps" or "epoch"
+  evaluation_strategy: "steps" # str: "steps" or "epoch"
+  save_strategy: "steps" # str: "steps" or "epoch"
   learning_rate: 0.0003 # float: learning rate
   lr_scheduler_type: "polynomial" # str: "linear" or "cosine" or "cosine_with_restarts" or "polynomial" or "constant" or "constant_with_warmup"
   per_device_train_batch_size: 2 # int: batch size
   per_device_eval_batch_size: 2 # int: batch size
   logging_steps: 50 # int: log every x steps
-  save_steps: 10000 # int: save every x steps
-  eval_steps: 10000 # int: evaluate every x steps
+  save_steps: 20000 # int: save every x steps
+  eval_steps: 20000 # int: evaluate every x steps
   warmup_steps: 2000 # int: warm up steps
-  save_total_limit: 100 # int: number of checkpoints to save
+  save_total_limit: 10 # int: number of checkpoints to save
   num_train_epochs: 3 # int: number of epochs
   predict_with_generate: True # bool: predict with generate
   fp16: False # bool: use fp16
